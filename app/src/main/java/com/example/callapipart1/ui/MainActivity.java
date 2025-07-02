@@ -1,5 +1,6 @@
 package com.example.callapipart1.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.callapipart1.R;
 import com.example.callapipart1.api.ApiService;
+import com.example.callapipart1.controller.MainController;
 import com.example.callapipart1.model.Currency;
 import com.example.callapipart1.model.Post;
 import com.example.callapipart1.model.PostResponse;
@@ -26,12 +28,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UserView {
     private TextView tvTerms;
     private TextView tvSource;
     private TextView tvUSDVND;
     private Button btnCallApi;
     private TextView tvPost;
+    MainController mainController;
 
 
     @Override
@@ -49,13 +52,7 @@ public class MainActivity extends AppCompatActivity {
         tvUSDVND = findViewById(R.id.tvUSDVND);
         btnCallApi = findViewById(R.id.btnCallApi);
         tvPost = findViewById(R.id.tvPost);
-        btnCallApi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//               clickCallApi();
-                sendPost();
-            }
-        });
+        mainController =new MainController(this,this);
 
     }
     private void clickCallApi() {
@@ -81,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void sendPost(){
+    public void sendPost(){
         Post post = new Post(10,101,"Tincoder","Tincoder channel");
         ApiService.apiService.sendPost(post).enqueue(new Callback<PostResponse>() {
             @Override
@@ -101,5 +98,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void  setCallApiButtonClickListener(View.OnClickListener listener){
+        btnCallApi.setOnClickListener(listener);
     }
 }

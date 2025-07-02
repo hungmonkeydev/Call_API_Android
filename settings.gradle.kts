@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "CallApiPart1"
 include(":app")
- 
+include(":Test")
+include(":Test1")
